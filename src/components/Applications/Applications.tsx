@@ -16,8 +16,6 @@ interface ApplicationsProps {
 }
 
 const Applications = ({ applications }: ApplicationsProps) => {
-  console.log(applications)
-
   const applicationColumns: ColumnDef<TInsuranceSubmission>[] = [
     {
       id: "select",

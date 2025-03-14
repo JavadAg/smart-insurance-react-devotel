@@ -15,21 +15,15 @@ export const useFieldValidation = (fieldData: TInsuranceFormField) => {
         }
       : undefined,
     validate: {
-      minLength: (value: string) => {
-        if (
-          fieldData.validation?.min &&
-          value.length < fieldData.validation?.min
-        ) {
-          return `Minimum length is ${fieldData.validation?.min}`
+      min: (value: number) => {
+        if (fieldData.validation?.min && value < fieldData.validation?.min) {
+          return `Minimum value is ${fieldData.validation?.min}`
         }
         return true
       },
-      maxLength: (value: string) => {
-        if (
-          fieldData.validation?.max &&
-          value.length > fieldData.validation?.max
-        ) {
-          return `Maximum length is ${fieldData.validation?.max}`
+      max: (value: number) => {
+        if (fieldData.validation?.max && value > fieldData.validation?.max) {
+          return `Maximum value is ${fieldData.validation?.max}`
         }
         return true
       }

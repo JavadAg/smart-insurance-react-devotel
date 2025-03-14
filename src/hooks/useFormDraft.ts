@@ -13,7 +13,13 @@ export function useFormDraft<T extends Record<string, any>>(
     if (formId) {
       const savedDraft = localStorage.getItem(`${DRAFT_STORAGE_KEY}_${formId}`)
       if (savedDraft) {
-        methods.reset(JSON.parse(savedDraft))
+        try {
+          const parsedData = JSON.parse(savedDraft)
+          methods.reset(parsedData)
+        } catch (error) {
+          // Invalid JSON in storage, ignore it
+          console.warn("Invalid form draft data in storage")
+        }
       }
     }
   }, [formId, methods])

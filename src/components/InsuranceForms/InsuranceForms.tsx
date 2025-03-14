@@ -1,12 +1,12 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { useState, useEffect } from "react"
 import type {
   TInsuranceForm,
-  TInsuranceFormFieldValue
+  TInsuranceFormFieldValue,
+  TInsuranceFormField
 } from "@/types/insurance-forms.type"
 import { Form } from "@/components/ui/form"
-import InsuranceFormField from "./InsuranceFormField"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -17,8 +17,9 @@ import {
 } from "../ui/select"
 import { Label } from "../ui/label"
 import { useInsuranceFormSubmission } from "@/hooks/useInsuranceFormSubmission"
-import GroupFormFields from "./GroupFormFields"
 import { useScopedI18n } from "@/locale/client"
+import { Reorder } from "motion/react"
+import InsuranceFormRow from "./InsuranceFormRow/InsuranceFormRow"
 
 interface FormsProps {
   forms: TInsuranceForm[]
@@ -28,6 +29,13 @@ const InsuranceForms = ({ forms }: FormsProps) => {
   const [selectedForm, setSelectedForm] = useState<TInsuranceForm | null>(
     forms[0]
   )
+  const [fields, setFields] = useState(selectedForm?.fields ?? [])
+
+  useEffect(() => {
+    if (selectedForm) {
+      setFields(selectedForm.fields)
+    }
+  }, [selectedForm])
 
   const { methods, submit, isSubmitting } =
     useInsuranceFormSubmission(selectedForm)
@@ -64,7 +72,7 @@ const InsuranceForms = ({ forms }: FormsProps) => {
           </SelectContent>
         </Select>
       </div>
-      {selectedForm && (
+      {selectedForm ? (
         <div
           key={selectedForm.formId}
           className="bg-primary-foreground rounded-lg p-3 shadow"
@@ -75,20 +83,24 @@ const InsuranceForms = ({ forms }: FormsProps) => {
               className="flex flex-col gap-6"
               onSubmit={methods.handleSubmit(handleSubmit)}
             >
-              {selectedForm.fields.map((field) => {
-                const isGroup =
-                  field.type === "group" && field.fields !== undefined
-
-                return (
-                  <Fragment key={field.id}>
-                    {isGroup ? (
-                      <GroupFormFields fields={field.fields!} />
-                    ) : (
-                      <InsuranceFormField fieldData={field} />
-                    )}
-                  </Fragment>
-                )
-              })}
+              <Reorder.Group
+                axis="y"
+                values={fields.map((f) => f.id)}
+                onReorder={(newOrder: string[]) => {
+                  const reorderedFields = newOrder
+                    .map((id) => fields.find((field) => field.id === id))
+                    .filter(
+                      (field): field is TInsuranceFormField =>
+                        field !== undefined
+                    )
+                  setFields(reorderedFields)
+                }}
+                className="flex flex-col gap-6"
+              >
+                {fields.map((field) => {
+                  return <InsuranceFormRow key={field.id} field={field} />
+                })}
+              </Reorder.Group>
               <Button
                 type="submit"
                 className="mt-4 max-w-fit"
@@ -99,6 +111,8 @@ const InsuranceForms = ({ forms }: FormsProps) => {
             </form>
           </Form>
         </div>
+      ) : (
+        <div>No form selected</div>
       )}
     </div>
   )

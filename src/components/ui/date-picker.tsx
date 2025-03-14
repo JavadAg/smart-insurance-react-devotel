@@ -12,14 +12,14 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { ControllerRenderProps } from "react-hook-form"
 
 interface DatePickerProps {
-  value: Date
-  onChange: (date: Date) => void
+  field: ControllerRenderProps
 }
 
-export function DatePicker({ value, onChange }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date>(value)
+export function DatePicker({ field }: DatePickerProps) {
+  const [date, setDate] = React.useState<Date>(field.value)
 
   return (
     <Popover>
@@ -42,7 +42,7 @@ export function DatePicker({ value, onChange }: DatePickerProps) {
           onSelect={(day) => {
             if (day) {
               setDate(day)
-              onChange(day)
+              field.onChange(day)
             }
           }}
           initialFocus

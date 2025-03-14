@@ -1,6 +1,4 @@
 import { useFormContext, type ControllerRenderProps } from "react-hook-form"
-import { Input } from "@/components/ui/input"
-import { Checkbox } from "@/components/ui/checkbox"
 import type { TInsuranceFormField } from "@/types/insurance-forms.type"
 import {
   FormControl,
@@ -9,20 +7,19 @@ import {
   FormLabel,
   FormMessage
 } from "../ui/form"
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem
-} from "../ui/select"
 import { DatePicker } from "../ui/date-picker"
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group"
-import { Label } from "../ui/label"
 import { useFieldVisibility } from "@/hooks/useFieldVisibility"
 import { useDynamicOptions } from "@/hooks/useDynamicOptions"
 import { useFieldValidation } from "@/hooks/useFieldValidation"
 import { cn } from "@/lib/utils"
+import {
+  TextField,
+  NumberField,
+  SelectField,
+  RadioField,
+  CheckboxField
+} from "./fields"
+import { Reorder } from "motion/react"
 
 interface FormFieldProps {
   fieldData: TInsuranceFormField
@@ -40,7 +37,7 @@ const InsuranceFormField = ({ fieldData, isGroup }: FormFieldProps) => {
       case "text":
         return ""
       case "number":
-        return 0
+        return ""
       case "date":
         return undefined
       case "checkbox":
@@ -59,84 +56,24 @@ const InsuranceFormField = ({ fieldData, isGroup }: FormFieldProps) => {
   const renderField = (field: ControllerRenderProps) => {
     switch (fieldData.type) {
       case "text":
-        return <Input {...field} />
+        return <TextField field={field} />
       case "number":
-        return (
-          <Input
-            type="number"
-            {...field}
-            onChange={(e) => {
-              const value = e.target.value
-              if (value === "" || !isNaN(Number(value))) {
-                field.onChange(value)
-              }
-            }}
-          />
-        )
+        return <NumberField field={field} />
       case "date":
-        return <DatePicker {...field} />
+        return <DatePicker field={field} />
       case "checkbox":
-        return <Checkbox {...field} />
+        return <CheckboxField field={field} />
       case "select":
         return (
-          <Select
-            {...field}
-            disabled={isLoading}
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue
-                placeholder={isLoading ? "Loading..." : fieldData.label}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {fieldData.options && fieldData.options.length > 0 ? (
-                fieldData.options.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))
-              ) : fieldData.dynamicOptions ? (
-                dynamicOptionsData ? (
-                  Object.values(dynamicOptionsData).map((value) => {
-                    if (Array.isArray(value)) {
-                      return value.map((option) => (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      ))
-                    }
-                    return null
-                  })
-                ) : (
-                  <span className="text-sm">
-                    Select {fieldData.dynamicOptions!.dependsOn} First
-                  </span>
-                )
-              ) : (
-                <span className="text-sm">
-                  {fieldData.label} is not available
-                </span>
-              )}
-            </SelectContent>
-          </Select>
+          <SelectField
+            field={field}
+            fieldData={fieldData}
+            dynamicOptionsData={dynamicOptionsData}
+            isLoading={isLoading}
+          />
         )
       case "radio":
-        return (
-          <RadioGroup
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            className="flex flex-row gap-4"
-          >
-            {fieldData.options?.map((option) => (
-              <div key={option} className="mt-2 flex items-center gap-2">
-                <RadioGroupItem value={option} />
-                <Label>{option}</Label>
-              </div>
-            ))}
-          </RadioGroup>
-        )
+        return <RadioField field={field} fieldData={fieldData} />
       default:
         return null
     }
