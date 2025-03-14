@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Insurance Application System
+
+A modern, dynamic insurance application system built with Next.js and React. This application provides a flexible and user-friendly interface for managing insurance forms and applications.
+
+## Features
+
+- Dynamic insurance form generation and handling
+- Real-time form validation
+- Drag-and-drop form field reordering
+- Multi-step application process
+- Responsive design
+- Application management dashboard
+- i18n support for multiple languages
+
+## Tech Stack
+
+- Next.js 14
+- React
+- TypeScript
+- React Hook Form
+- TanStack Query
+- Motion
+- Tailwind CSS
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `/app` - Next.js app router pages and layouts
+- `/components` - Reusable React components
+- `/hooks` - Custom React hooks
+- `/types` - TypeScript type definitions
+- `/api` - API routes and services
+- `/lib` - Utility functions and helpers
 
-## Learn More
+## Key Features
 
-To learn more about Next.js, take a look at the following resources:
+### Dynamic Form System
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Configurable form fields with various types (text, number, select, radio, checkbox)
+- Dynamic field visibility based on conditions
+- Real-time validation
+- Dynamic options loading based on dependencies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Application Management
 
-## Deploy on Vercel
+- Comprehensive application tracking
+- Sortable and filterable data tables
+- Detailed application views
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
